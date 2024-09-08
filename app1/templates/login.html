@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <title>Login & Registration Form</title>
+</head>
+<body>
+  <div class="container">
+    <div class="login form">
+      <form action="{% url 'login'%}" method="post" >
+        {% csrf_token %}
+        <header>Login</header>
+        <input type="text" name="Lusername" placeholder="Enter your Username" required>
+        <input type="password" name="Lpassword" placeholder="Enter your password" required>
+        {% for msg in messages %}
+        <div class="info-alert {{ msg.tags }}">
+          {{ msg.message }}
+        </div>
+        {% endfor %}
+        <br><br>
+        <!-- Add the reCAPTCHA widget with inline margin -->
+        <div style="margin-left: 30px;" class="g-recaptcha" data-sitekey="6LcCezYqAAAAAKzMeQYNFcOQbWY0k8X53woRwMah"></div>
+        <br><br>
+        <!-- Forgot password link with inline styling -->
+        <a href="{% url 'signup'%}" style="display: block; margin-bottom: 10px; margin-left: 86px;">Forgot password?</a>
+        <input type="submit" class="button" value="Login">
+        <div class="signup">
+          <span class="signup">Don't have an account?
+            <!-- Signup label with inline styling -->
+            <a href="{% url 'signup' %}" style="cursor: pointer; color:  #009579; text-decoration: none;"><label for="check"></label style='margin-left: 0px;'>Signup</label></a>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const messages = document.querySelectorAll('.info-alert');
+      messages.forEach(message => {
+        setTimeout(() => {
+          message.style.opacity = '0'; 
+          setTimeout(() => {
+            message.remove(); 
+          }, 1000); 
+        }, 1000);
+      });
+    });
+  </script>
+</body>
+</html>

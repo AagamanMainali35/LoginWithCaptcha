@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="registration form">
+            <form action="{% url 'signup' %}" method="post">
+                {% csrf_token %}
+                <header>Signup</header>
+                <input type="text" name="username" placeholder="Enter your Username" required>
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm your password" required>
+                {% for msg in messages %}
+                <div class="info-alert {{ msg.tags }}">
+                    {{ msg.message }}
+                </div>
+                {% endfor %}
+                <script>
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                      const messages = document.querySelectorAll('.info-alert');
+                      messages.forEach(message => {
+                        setTimeout(() => {
+                          message.style.opacity = '0'; 
+                          setTimeout(() => {
+                            message.remove(); 
+                          }, 1000); 
+                        }, 1000);
+                      });
+                    });
+                  </script>
+                <label for="">
+                    Strength of password :
+                </label>
+                <br>
+                <div class="power-container">
+                    <div id="power-point"></div>
+                </div>
+                <input type="submit" class="button" value="Signup">
+                <div class="signup">
+                    <span class="signup">Already have an account?
+                        <label for="check"><a href="{% url 'login' %}" style="cursor: pointer; color: #009579; text-decoration: none;">Login</a></label>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        let password = document.getElementById("password");
+        let power = document.getElementById("power-point");
+
+        password.oninput = function () {
+            let point = 0;
+            let value = password.value;
+            let widthPower = ["1%", "25%", "50%", "75%", "100%"];
+            let colorPower = ["#D73F40", "#DC6551", "#F2B84F", "#BDE952", "#3ba62f"];
+
+            if (value.length >= 6) {
+                let arrayTest = [/[0-9]/, /[a-z]/, /[A-Z]/, /[^0-9a-zA-Z]/];
+                arrayTest.forEach((item) => {
+                    if (item.test(value)) {
+                        point += 1;
+                    }
+                });
+            }
+            power.style.width = widthPower[point];
+            power.style.backgroundColor = colorPower[point];
+        };
+    </script>
+</body>
+</html>
